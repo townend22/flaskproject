@@ -1,0 +1,32 @@
+{
+    "theme_color": "#181546",
+    "background_color": "#1a0d43",
+    "display": "browser",
+    "scope": "/",
+    "start_url": "/",
+    "name": "Top Movies Hub | One Click Download",
+    "short_name": "Top Movies Hub | One Click Download",
+    "description": "Access India's largest movie collection Now. Watch & download HD & 4k Movies, TV Shows. One Click Download. No Ad.",
+    "icons": [
+        {
+            "src": "/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/icon-256x256.png",
+            "sizes": "256x256",
+            "type": "image/png"
+        },
+        {
+            "src": "/icon-384x384.png",
+            "sizes": "384x384",
+            "type": "image/png"
+        },
+        {
+            "src": "/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
