@@ -104,11 +104,7 @@ class="web-col web-col--4 web-col--lg-3 web-col--xl-1-5 web-col--xxl-2 web-carou
                         </div>
                     </div>
                 </div>
-                <div class="web-content-tile__tags-row">
-                    <div class="web-content-tile__tags">
-                       {tags}
-                    </div>
-                </div>
+            
             </div>
         </div>
     </div>
