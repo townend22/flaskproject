@@ -67,7 +67,8 @@ def getdata():
     </span>'''
         except:
             for keyword in keywords_list:
-                tags = f'''{tags}       
+                tags = f'''{tags}  
+{keyword}<!-- -->&nbsp;·&nbsp;     
                            {keyword.upper()}·
                         '''
    
@@ -76,6 +77,44 @@ def getdata():
         url = title_to_url_format(url)
 
         raw = f"""
+    <div data-test-id="web-ui-grid-item"
+class="web-col web-col--4 web-col--lg-3 web-col--xl-1-5 web-col--xxl-2 web-carousel__item web-carousel__item--enable-transition">
+<div data-test-id="web-ui-content-tile" class="web-content-tile">
+    <div class="web-content-tile__container">
+        <div class="web-content-tile__poster">
+            <div class="web-poster">
+                <div class="web-poster__image-container"><img class="web-poster__image-element"
+                        src="{item.thumbnail}"
+                        srcset="" alt="{item.title}"></div>
+            </div>
+        </div>
+        <div class="web-content-tile__content-info">
+            <div class="web-content-tile__content-digest"><a href="{url}"
+                    class="web-content-tile__title">Standing
+                    Ovation</a>
+                <div class="web-content-tile__year-duration-rating">
+                    <div class="web-content-tile__year">2010
+                    </div>
+                    <div class="web-content-tile__duration">1 hr
+                        46 min</div>
+                    <div class="web-content-tile__rating">
+                        <div class="web-rating">
+                            <div class="web-rating__content">PG
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="web-content-tile__tags-row">
+                    <div class="web-content-tile__tags">
+                       {tags}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+        
 <div data-test-id="web-ui-grid-item"
     class="web-col web-col--4 web-col--lg-3 web-col--xl-1-5 web-col--xxl-2 web-carousel__item web-carousel__item--enable-transition">
     <div data-test-id="web-ui-content-tile" class="web-content-tile">
