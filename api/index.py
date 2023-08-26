@@ -1,15 +1,18 @@
 from flask import Flask, render_template, request,session,redirect
 from flask_sqlalchemy import SQLAlchemy
 import cloudinary
-from flask_cors import CORS, cross_origin
-
 
 import cloudinary.uploader
 from datetime import datetime
+import re
+
+def title_to_url_format(title):
+    # Remove special characters, spaces, and convert to lowercase
+    cleaned_title = re.sub(r'[^a-zA-Z0-9 ]', '', title).replace(' ', '-').lower()
+    url_format = f"{cleaned_title}"
+    return url_format
+
 app = Flask(__name__)
-
-cors = CORS(app, resources={r"/*": {"origins": "*"}})
-
 # Send a GET request to the website
 # Setting data Base
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://epiz_31969556:scNLezC0sLMSr@sql307.infinityfree.com/epiz_31969556_movie'
@@ -63,32 +66,38 @@ def getdata():
     </span>'''
         except:
             for keyword in keywords_list:
-                tags = f'''{tags} <span>
-    <a href="/" class="h-g-primary">{keyword}</a>
-    </span>'''
+                tags = f'''{tags}       
+                           {keyword.upper()}·
+                        '''
    
         # Extract data of movie
         url = item.title
-        url = url.rstrip()
-        url = url.replace(' ','-')
+        url = title_to_url_format(url)
 
         raw = f"""
-<div class="col mb-5 mb-xl-0" style="margin-top:20px;">
-                                    <div class="product">
-                                        <div class="product-image mb-2">
-                                            <a href="{url}" class="d-inline-block position-relative stretched-link">
-                                                <img class="img-fluid" src="{item.thumbnail}" alt="{item.title}">
-                                            </a>
-                                        </div>
-                                        <div class="product-meta font-size-12 mb-1">
-                                          {tags}
-                             
-                                        </div>
-                                        <div class="font-weight-bold font-size-1"style="width: 6cm;">
-                                            <a href="{url}">{item.title}</a>
-                                        </div>
-                                    </div>
-                                </div>
+<div data-test-id="web-ui-grid-item"
+    class="web-col web-col--4 web-col--lg-3 web-col--xl-1-5 web-col--xxl-2 web-carousel__item web-carousel__item--enable-transition">
+    <div data-test-id="web-ui-content-tile" class="web-content-tile">
+        <div class="web-content-tile__container">
+            <div class="web-content-tile__poster">
+                <div class="web-poster">
+                    <div class="web-poster__image-container"><img class="web-poster__image-element"
+                            src="{item.thumbnail}"
+                            srcset="" alt=""></div>
+                </div>
+            </div>
+            <div class="web-content-tile__content-info">
+                <div class="web-content-tile__content-digest"><a href="{url}" class="web-content-tile__title">{item.title}</a>
+            
+                    <div class="web-content-tile__tags-row">
+                        <div class="web-content-tile__tags">{tags}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {raw}"""
     return raw
 @app.route('/about/')
@@ -181,8 +190,7 @@ def movie(mo):
     for item in dbms:
         title = item.title
         url = title
-        url = url.rstrip()
-        url = url.replace(' ','-')
+        url = title_to_url_format(url)
         if url == mo:
             input_string = item.code
             task  = input_string[2:-2]
@@ -202,7 +210,6 @@ def movie(mo):
             url = item.thumbnail
             return render_template('movie.html',title=title,desc=desc,url=url,raw = raw)
 
-            print(task)
     return render_template('notfound.html'),404
 @app.route('/pub/')
 def pub():
@@ -211,4 +218,4 @@ def pub():
 
 
 if __name__ == '__main__':
-    app.run(debug=True,host="0.0.0.0")
+    app.run(debug=True,port='8080',host="0.0.0.0")
