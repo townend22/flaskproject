@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request,session,redirect
 from flask_sqlalchemy import SQLAlchemy
 import cloudinary
+from flask_cors import CORS
 
 import cloudinary.uploader
 from datetime import datetime
@@ -17,7 +18,7 @@ app = Flask(__name__)
 # Setting data Base
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://epiz_31969556:scNLezC0sLMSr@sql307.infinityfree.com/epiz_31969556_movie'
 app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+mysqlconnector://townend:krishna4704@db4free.net/townend"
-
+CORS(app)  # Apply CORS to the entire app
 cloudinary.config( 
   cloud_name = "dofvicxek", 
   api_key = "465383777877424", 
