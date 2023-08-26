@@ -77,6 +77,7 @@ def getdata():
         url = title_to_url_format(url)
 
         raw = f"""
+        <a href="{url}">
     <div data-test-id="web-ui-grid-item"
 class="web-col web-col--4 web-col--lg-3 web-col--xl-1-5 web-col--xxl-2 web-carousel__item web-carousel__item--enable-transition">
 <div data-test-id="web-ui-content-tile" class="web-content-tile">
@@ -133,7 +134,7 @@ class="web-col web-col--4 web-col--lg-3 web-col--xl-1-5 web-col--xxl-2 web-carou
             </div>
         </div>
     </div>
-</div>
+</div></a>
 {raw}"""
     return raw
 @app.route('/about/')
