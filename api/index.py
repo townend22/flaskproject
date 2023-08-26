@@ -1,10 +1,15 @@
 from flask import Flask, render_template, request,session,redirect
 from flask_sqlalchemy import SQLAlchemy
 import cloudinary
+from flask_cors import CORS, cross_origin
+
 
 import cloudinary.uploader
 from datetime import datetime
 app = Flask(__name__)
+
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
+
 # Send a GET request to the website
 # Setting data Base
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://epiz_31969556:scNLezC0sLMSr@sql307.infinityfree.com/epiz_31969556_movie'
