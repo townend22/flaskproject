@@ -77,7 +77,7 @@ def getdata():
         url = title_to_url_format(url)
 
         raw = f"""
-        <a href="{url}">
+        <a href="/{url}">
     <div data-test-id="web-ui-grid-item"
 class="web-col web-col--4 web-col--lg-3 web-col--xl-1-5 web-col--xxl-2 web-carousel__item web-carousel__item--enable-transition">
 <div data-test-id="web-ui-content-tile" class="web-content-tile">
@@ -90,7 +90,7 @@ class="web-col web-col--4 web-col--lg-3 web-col--xl-1-5 web-col--xxl-2 web-carou
             </div>
         </div>
         <div class="web-content-tile__content-info">
-            <div class="web-content-tile__content-digest"><a href="{url}"
+            <div class="web-content-tile__content-digest"><a href="/{url}"
                     class="web-content-tile__title">{item.title}</a>
                 <div class="web-content-tile__year-duration-rating">
                     <div class="web-content-tile__year">2010
@@ -215,7 +215,7 @@ def movie(mo):
         
                 raw = f"""
    <p style="color: rgb(0, 183, 255);font-size: 20px; font-weight: bolder;">{dic['text']}</p>
-                                        <a href="{dic['url']}" target="_blank"><button class="btn btn-primary" style="width: 7cm;">Download 1</button></a>
+                                        <a href="/{dic['url']}" target="_blank"><button class="btn btn-primary" style="width: 7cm;">Download 1</button></a>
                                         <br>
                                         <br>{raw}
 """
