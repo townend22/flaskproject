@@ -91,8 +91,7 @@ class="web-col web-col--4 web-col--lg-3 web-col--xl-1-5 web-col--xxl-2 web-carou
         </div>
         <div class="web-content-tile__content-info">
             <div class="web-content-tile__content-digest"><a href="{url}"
-                    class="web-content-tile__title">Standing
-                    Ovation</a>
+                    class="web-content-tile__title">{item.title}</a>
                 <div class="web-content-tile__year-duration-rating">
                     <div class="web-content-tile__year">2010
                     </div>
