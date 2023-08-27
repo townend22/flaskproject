@@ -260,6 +260,7 @@ def movie(mo):
 <br>
 <br>
 <div>
+<span>{item.keywords}</span>
     <div class="rjiTB">
         <div class="Le3zO">
             <div class="zHQGA">
@@ -330,7 +331,7 @@ def movie(mo):
                             </div>
                         </div>
                         <div data-test-id="web-ui-grid-item" id="mov1" class="web-col web-col--sm-12 web-col--lg-9">
-                            <h1 class="c1jX9">{title}</h1>
+                            <h1 class="c1jX9" id="mv-title">{title}</h1>
                             <div class="web-attributes">
                                 <div class="web-attributes__meta"><span>2017 · 1 hr 31 min</span>
                                     <div class="web-attributes__rating-descriptor">
