@@ -46,6 +46,38 @@ def index():
     
 
     return render_template('index.html')
+@app.route('/sitemap.xml')
+def sitemap():
+    dbms = Resource.query.all()
+    tm = ''
+    for item in dbms:
+        url = item.title
+        url = title_to_url_format(url)
+        current_date = datetime.now().strftime('%Y-%m-%d')
+
+        tm = f'''<url>
+<loc>{url}</loc>
+<lastmod>{current_date}</lastmod>
+<changefreq>weekly</changefreq>
+<priority>0.8</priority>
+</url>
+{tm}'''
+
+    site = f'''<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+<loc>https://topfilmhub.xyz/</loc>
+<lastmod>2023-08-25</lastmod>
+<changefreq>daily</changefreq>
+<priority>1.0</priority>
+</url>
+{tm}
+<!-- Add more URL entries for other pages -->
+</urlset>
+
+    '''
+    
+    return Response(site, content_type='text/xml')
 
 @app.route('/get-data/')
 def getdata():
