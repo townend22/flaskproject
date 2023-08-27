@@ -169,7 +169,7 @@ def dashboard():
     return redirect('/admin')
 
 
-@app.route('/upload', methods=['POST'])
+@app.route('/upload/', methods=['POST'])
 def upload():
     title = request.form['title']
     description = request.form.get('description', '')  # Use get() with a default value
