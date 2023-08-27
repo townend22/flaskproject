@@ -56,7 +56,7 @@ def sitemap():
         current_date = datetime.now().strftime('%Y-%m-%d')
 
         tm = f'''<url>
-<loc>{url}</loc>
+<loc>https://topfilmhub.xyz/{url}</loc>
 <lastmod>{current_date}</lastmod>
 <changefreq>weekly</changefreq>
 <priority>0.8</priority>
