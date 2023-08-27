@@ -260,7 +260,8 @@ def movie(mo):
 <br>
 <br>
 <div>
-<span>{item.keywords}</span>
+<span style="display:none;" id = 'keywords'>{item.keywords}</span>
+<span style="display:none;" id = 'deep'>{item.description}</span>
     <div class="rjiTB">
         <div class="Le3zO">
             <div class="zHQGA">
