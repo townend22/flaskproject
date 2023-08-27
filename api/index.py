@@ -90,8 +90,7 @@ class="web-col web-col--4 web-col--lg-3 web-col--xl-1-5 web-col--xxl-2 web-carou
         </div>
         <div class="web-content-tile__content-info">
             <div class="web-content-tile__content-digest"><a href="{url}"
-                    class="web-content-tile__title">Standing
-                    Ovation</a>
+                    class="web-content-tile__title">{item.title}</a>
                 <div class="web-content-tile__year-duration-rating">
                     <div class="web-content-tile__year">2010
                     </div>
@@ -115,29 +114,7 @@ class="web-col web-col--4 web-col--lg-3 web-col--xl-1-5 web-col--xxl-2 web-carou
 </div>
 </div>
         
-<div data-test-id="web-ui-grid-item"
-    class="web-col web-col--4 web-col--lg-3 web-col--xl-1-5 web-col--xxl-2 web-carousel__item web-carousel__item--enable-transition">
-    <div data-test-id="web-ui-content-tile" class="web-content-tile">
-        <div class="web-content-tile__container">
-            <div class="web-content-tile__poster">
-                <div class="web-poster">
-                    <div class="web-poster__image-container"><img class="web-poster__image-element"
-                            src="{item.thumbnail}"
-                            srcset="" alt=""></div>
-                </div>
-            </div>
-            <div class="web-content-tile__content-info">
-                <div class="web-content-tile__content-digest"><a href="{url}" class="web-content-tile__title">{item.title}</a>
-            
-                    <div class="web-content-tile__tags-row">
-                        <div class="web-content-tile__tags">{tags}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
 {raw}"""
     return raw
 @app.route('/about/')
