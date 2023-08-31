@@ -1,11 +1,66 @@
-from flask import Flask, render_template, request,session,redirect
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, request,session,redirect,Response
 import cloudinary
 from flask_cors import CORS
 import cloudinary.uploader
 from datetime import datetime
 import re
+from google.oauth2 import service_account
+import gspread
 
+google_json = {
+  "type": "service_account",
+  "project_id": "dino-blogs",
+  "private_key_id": "cc602d4ab622501047c33481d401205f4353810f",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC+etN28OmTSIHR\nBRu+BsTmaEvx1RXHmzi2Dq8PE7mqQBwM2hTtTJxKS9RuyLQpcljVY5oXGQW0WPdd\nCxEQ415sAidzeeT5v+2lIHXPhI0pUOhU3qM5oU9KvP2Fzoa6SyHSO6nAriEc0uix\nq3HzpII3AISKcZiMfdFJGffJd3XUWRpBmaUZfBzYRgZ+9iATf58pA85aDyD0C9HR\neJXiw+BNR+8xF2pv7h7WUCdjNc7g2s9dTsuq9xJdlTKN99mNKV8Su3MDrewcQgDK\nqEpByIwpX0Xq1w/BZBqZbPf9Y7mIMMQ76WOAz9JbT/eYhOil2idldyddlUWLCBiw\nTlAj6WqnAgMBAAECggEAAIpJfTy4PNtno/xAcAg8mLauJiuQrGPQKKUoljiAh0ql\nQJOBwIsZgTmT0+91faAHP5usRlcQ04EbXw0tsn9HJSFFAV9CaNXEXOg78d5JFDLG\nHMHKBZH1+FHcmjJmK7MURnmj+75U9f5k12Zu7UvQ2iY48NwkLsCsBSCflSDTdSWz\n/jo6WVJbp1cfs5rsRRh+4WopuQFQ4M9JeUNdaxOG1JYCYtu4Y1SnUUpWrYxPYIT5\nGNqoBUGencvjh8B9auzYYmDg3K9ZcitiY0xWxxQYPh+tHOiyM5iI63Vog5ct3saT\nV1WWIh55Z4hTbKyNL4A5UyHWfLJ/bnQ6/2PQYzjcEQKBgQD7BU1Z2H011+pePyOs\n9pf/Z9y2wU2vc/S++PlBK4F6gTjZHWlT8iAASTvtH37OOrq7FljaTAJgR2V+70HT\nBY4kL3x7TriUivwpGlnqdUZ7+IR0beUvpqZt74SsDhK447TdXs1HCkqgbvhmg2Fo\nXIBymCuKVBd8f/pa4Or+YTrkDwKBgQDCQhfyJXUyMK1Cf4DDw3/1RuXFghLe7dum\n2Oqd5cX4PKLmcZcer4f2fKFbSA90yEZjOVRegLS5MA3/SBqJ/eXGFzm3kgkJIMGh\nnsaxq9Kw2WcvIefidQdYD5SCcTb7+27zYmyJfJINHhpuDq2hqmKauypLCIc/9a19\nATvgw4WX6QKBgBxTDdZcgkxoD68QytLChIYyTwpkJ4Lrv6so5t8+rH6JREPjeLYb\nNRczLErmaeWVZOqla+M9/mqkw8Qd9Tx9fPuCTDaRvGwufqOYsJqvHwPwF+oXWGwX\nDuKKy1qqv9wS/Z6ZCurAM4mE3AydOImRHoFPwGH8eSX4PuSwSnPnvsBrAoGBAJRf\nuTyJ4ccRKPU2wBpGk9C7czr1jAZcdT4uRp2N6DUf02jicAPPHLFnJjO7iZqwchrN\nqiR4eBFOpBJNd3/Yvw0bpkkRMPeY3mzdAnSogcf0dfypEB2HN7HKTKuJX+79cBRU\nJASrcj60tIlFiteFdcUrmjUvcWan9vgY3ixiCwMpAoGAEXHpLhZDXxczXxhR8Wgk\nNdwYn010DIexwm538opMILogF+OoS9x79Ny0tzyyxtbqKlOgvG0OOXlcbmpZvYmo\nuasST3xlIgvVmNr6sdqpnzPrEp+OesWygSPZxPI88c9binDSGCV92T0NbpK5pHWO\nGdpqPp1tdoP3tJ3fwZL65xw=\n-----END PRIVATE KEY-----\n",
+  "client_email": "naradai@dino-blogs.iam.gserviceaccount.com",
+  "client_id": "110256050701288670280",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/naradai%40dino-blogs.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
+
+
+service_account_info = (google_json)
+credentials = service_account.Credentials.from_service_account_info(service_account_info)
+
+scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
+creds_with_scope = credentials.with_scopes(scope)
+
+client = gspread.authorize(creds_with_scope)
+spreadsheet = client.open_by_url('https://docs.google.com/spreadsheets/d/1cHoPjb7JMy463_9-jSk_OUxyEb6MD8Zkrsda8xMdjVQ/edit?usp=sharing')
+
+worksheet = spreadsheet.get_worksheet(0)
+
+def Resource():
+    return worksheet.get_all_records()
+
+def db(title,thumbnail,description,code,keywords,type_movie):
+    data = [title,thumbnail,description,code,keywords,type_movie]
+    worksheet.append_row(data)
+def db_find(title):
+    records_data = worksheet.get_all_records()
+    raw = None
+    for rc in records_data:
+        if(rc['title'] == title):
+            raw = {'title':rc['title'],'thumbnail':rc['thumbnail'],'description':rc['description'],'code':rc['code'],'keywords':rc['keywords'],'type_movie':rc['type_movie']}
+            break
+    return raw
+def db_code(title):
+    records_data = worksheet.get_all_records()
+    rt = ''
+    for rc in records_data:
+        if(rc['title'] == title):
+            rm = (eval(rc['code'])[0])
+            rm = eval(rm)
+            rt = rm
+            break
+    return rt
+
+
+
+    
 def title_to_url_format(title):
     # Remove special characters, spaces, and convert to lowercase
     cleaned_title = re.sub(r'[^a-zA-Z0-9 ]', '', title).replace(' ', '-').lower()
@@ -17,7 +72,6 @@ CORS(app)  # Apply CORS to the entire app
 # Send a GET request to the website
 # Setting data Base
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://epiz_31969556:scNLezC0sLMSr@sql307.infinityfree.com/epiz_31969556_movie'
-app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+mysqlconnector://townend:krishna4704@db4free.net/townend"
 
 cloudinary.config( 
   cloud_name = "dofvicxek", 
@@ -25,21 +79,8 @@ cloudinary.config(
   api_secret = "a6ErazY7iy9WCT-cneQMZA7sZZQ" 
 )
 
-db = SQLAlchemy(app)
 app.secret_key = "q3898c83958858g829275gj2987f987f893jf9trijwlktj398troeiu895utit875ituijti8"  # Set a secret key for session security
 
-class Resource(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(120), nullable=False)
-    thumbnail = db.Column(db.String(200))  # Assuming it's a URL or file path
-    description = db.Column(db.Text, nullable=False)
-    code = db.Column(db.Text, nullable=False)
-    keywords = db.Column(db.Text, nullable=False)
-    type_movie = db.Column(db.Text, nullable=False)
-    
-
-    def __repr__(self):
-        return f'<Resource {self.title}>'
 
 @app.route('/')
 def index():
@@ -48,10 +89,10 @@ def index():
     return render_template('index.html')
 @app.route('/sitemap.xml')
 def sitemap():
-    dbms = Resource.query.all()
+    dbms = Resource()
     tm = ''
     for item in dbms:
-        url = item.title
+        url = item['title']
         url = title_to_url_format(url)
         current_date = datetime.now().strftime('%Y-%m-%d')
 
@@ -81,11 +122,11 @@ def sitemap():
 
 @app.route('/get-data/')
 def getdata():
-    dbms = Resource.query.all()
+    dbms = Resource()
     raw = ''
     for item in dbms:
                 # Input sentence containing keywords separated by commas
-        sentence = item.keywords
+        sentence = item['keywords']
 
         
         # Split the sentence into individual keywords
@@ -105,7 +146,7 @@ def getdata():
                         '''
    
         # Extract data of movie
-        url = item.title
+        url = item['title']
         url = title_to_url_format(url)
 
         raw = f"""
@@ -116,13 +157,13 @@ class="web-col web-col--4 web-col--lg-3 web-col--xl-1-5 web-col--xxl-2 web-carou
         <div class="web-content-tile__poster">
             <div class="web-poster">
                 <div class="web-poster__image-container"><img class="web-poster__image-element"
-                        src="{item.thumbnail}"
-                        srcset="" alt="{item.title}"></div>
+                        src="{item['thumbnail']}"
+                        srcset="" alt="{item['title']}"></div>
             </div>
         </div>
         <div class="web-content-tile__content-info">
             <div class="web-content-tile__content-digest"><a href="{url}"
-                    class="web-content-tile__title">{item.title}</a>
+                    class="web-content-tile__title">{item['title']}</a>
                 <div class="web-content-tile__year-duration-rating">
                     <div class="web-content-tile__year">2010
                     </div>
@@ -178,7 +219,6 @@ def login():
     username = request.form.get('username')
     password = request.form.get('password')
 
-    print(username+password)
     # Save username and password to the session
     if username == 'admin' and password == 'ilovecat':
         session['username'] = username
@@ -219,33 +259,33 @@ def upload():
     upload_result = cloudinary.uploader.upload(image, public_id=name1)
     image_url = upload_result['secure_url']
     
-    new_resource = Resource(
+    db(
     title=title,
     thumbnail=image_url,
     type_movie=movie_type,
     keywords=tags,
     description=description,
     code=str(download_data)
-)
+    )
 
-    # Add the new resource to the database
-    db.session.add(new_resource)
-    db.session.commit()
+
     return 'true'
 @app.route('/<mo>')
 def movie(mo):
-    dbms = Resource.query.all()
+    dbms = Resource()
     for item in dbms:
-        title = item.title
+        title = item['title']
         url = title
         url = title_to_url_format(url)
         if url == mo:
-            input_string = item.code
-            task  = input_string[2:-2]
-            task = f'[{task}]'
-            task = eval(task)
+            # input_string = item['code']
+            # task  = input_string[2:-2]
+            # task = f'[{task}]'
+            # task = eval(task)
+            task = db_code(title)
+            print(task)
             raw = ''
-            sentence = item.keywords
+            sentence = item['keywords']
             # Split the sentence into individual keywords
             keywords_list = sentence.split(",")
             # Print the first three keywords
@@ -276,8 +316,8 @@ def movie(mo):
     </div>
 </button></a>
 """
-            description = item.description
-            thumbnail = item.thumbnail
+            description = item['description']
+            thumbnail = item['thumbnail']
 
             tm = f"""
 <br>
@@ -291,8 +331,8 @@ def movie(mo):
 <br>
 <br>
 <div>
-<span style="display:none;" id = 'keywords'>{item.keywords}</span>
-<span style="display:none;" id = 'deep'>{item.description}</span>
+<span style="display:none;" id = 'keywords'>{item['keywords']}</span>
+<span style="display:none;" id = 'deep'>{description}</span>
     <div class="rjiTB">
         <div class="Le3zO">
             <div class="zHQGA">
@@ -417,13 +457,13 @@ def movie(mo):
     return 'Not Found'
 @app.route('/get/<mo>')
 def topuo(mo):
-    dbms = Resource.query.all()
+    dbms = Resource()
     for item in dbms:
-        title = item.title
+        title = item['title']
         url = title
         url = title_to_url_format(url)
         if url == mo:
-            input_string = item.code
+            input_string = item['code']
             task  = input_string[2:-2]
             task = f'[{task}]'
             task = eval(task)
@@ -438,8 +478,8 @@ def topuo(mo):
                                         <br>
                                         <br>{raw}
 """
-            desc = item.description
-            url = item.thumbnail
+            desc = item['description']
+            url = item['thumbnail']
             return render_template('movie.html',title=title,desc=desc,url=url,raw = raw)
 
     return render_template('notfound.html'),404
