@@ -1,5 +1,6 @@
 flask
-flask_sqlalchemy
+google
+gspread
 cloudinary
 mysql-connector-python
 flask_cors
